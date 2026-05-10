@@ -50,12 +50,12 @@ export default function PromptPage({ params }: Props) {
           </Link>
 
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-            <div className="relative h-96 w-full">
+            <div className="relative w-full bg-gray-100 flex items-center justify-center" style={{ aspectRatio: '9 / 16', maxHeight: '600px' }}>
               <Image
                 src={prompt.imageUrl}
                 alt={prompt.title}
                 fill
-                className="object-cover"
+                className="object-contain"
                 priority
               />
             </div>
@@ -164,12 +164,12 @@ export default function PromptPage({ params }: Props) {
                 {relatedPrompts.map((relatedPrompt) => (
                   <Link key={relatedPrompt.id} href={`/prompts/${relatedPrompt.id}`}>
                     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full cursor-pointer">
-                      <div className="relative h-40 w-full">
+                      <div className="relative w-full bg-gray-100 flex items-center justify-center" style={{ aspectRatio: '9 / 16' }}>
                         <Image
                           src={relatedPrompt.imageUrl}
                           alt={relatedPrompt.title}
                           fill
-                          className="object-cover"
+                          className="object-contain"
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
                       </div>

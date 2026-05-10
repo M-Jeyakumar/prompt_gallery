@@ -25,12 +25,12 @@ export default function PromptCard({ prompt }: PromptCardProps) {
   return (
     <Link href={`/prompts/${prompt.id}`}>
       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full cursor-pointer">
-        <div className="relative h-48 w-full">
+        <div className="relative w-full bg-gray-100 flex items-center justify-center" style={{ aspectRatio: '9 / 16' }}>
           <Image
             src={prompt.imageUrl}
             alt={prompt.title}
             fill
-            className="object-cover"
+            className="object-contain"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           <div className="absolute top-2 right-2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
