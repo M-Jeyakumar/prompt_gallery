@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     description:
       'Browse and copy high-quality AI image generation prompts for ChatGPT, Google Gemini, and more.',
     type: 'website',
-    url: 'https://promptgallery.vercel.com',
+    url: 'https://promptgalleryia.vercel.app',
     images: [
       {
         url: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=1200&h=630',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   },
   robots: 'index, follow',
   alternates: {
-    canonical: 'https://promptgallery.vercel.com',
+    canonical: 'https://promptgalleryia.vercel.app',
   },
 };
 

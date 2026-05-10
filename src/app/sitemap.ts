@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { prompts } from '@/data/prompts';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://promptgallery.vercel.com';
+  const baseUrl = 'https://promptgalleryia.vercel.app';
 
   const promptRoutes = prompts.map((prompt) => ({
     url: `${baseUrl}/prompts/${prompt.id}`,

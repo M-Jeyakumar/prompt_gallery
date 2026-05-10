@@ -26,11 +26,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://promptgallery.com",
+    url: "https://promptgalleryia.vercel.app",
     siteName: "Prompt Gallery",
   },
   alternates: {
-    canonical: "https://promptgallery.com",
+    canonical: "https://promptgalleryia.vercel.app",
   },
 };
 
@@ -54,7 +54,8 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        <link rel="canonical" href="https://promptgallery.com" />
+        <meta name="google-site-verification" content="chCwwRgKZGtFdGybLCTEfQ8RFmPf4cPndbowFfZtyh8" />
+        <link rel="canonical" href="https://promptgalleryia.vercel.app/" />
       </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

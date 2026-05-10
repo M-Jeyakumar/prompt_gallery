@@ -4,12 +4,12 @@ export function generateJsonLd() {
     '@type': 'WebSite',
     name: 'Prompt Gallery',
     description: 'Discover and share amazing AI image generation prompts',
-    url: 'https://promptgallery.vercel.com',
+    url: 'https://promptgalleryia.vercel.app',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://promptgallery.vercel.com/?q={search_term_string}',
+        urlTemplate: 'https://promptgalleryia.vercel.app/?q={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },

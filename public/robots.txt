@@ -4,7 +4,7 @@ Disallow: /_next/
 Disallow: /*.json$
 Disallow: /admin/
 
-Sitemap: https://promptgallery.vercel.com/sitemap.xml
+Sitemap: https://promptgalleryia.vercel.app/sitemap.xml
 
 User-agent: AdsBot-Google
 Allow: /
