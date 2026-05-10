@@ -3,8 +3,14 @@ Allow: /
 Disallow: /_next/
 Disallow: /*.json$
 Disallow: /admin/
+Disallow: /.vercel/
+
+Crawl-delay: 1
 
 Sitemap: https://promptgalleryia.vercel.app/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
 
 User-agent: AdsBot-Google
 Allow: /

@@ -8,7 +8,6 @@ export interface Prompt {
   tags: string[];
   author?: string;
   createdAt: string;
-  views: number;
 }
 
 export const prompts: Prompt[] = [
@@ -22,7 +21,6 @@ export const prompts: Prompt[] = [
     tags: ['cyberpunk', 'city', 'night', 'futuristic', 'digital-art'],
     author: 'AI Artist',
     createdAt: '2024-01-15',
-    views: 1250,
   },
   {
     id: 'prompt-2',
@@ -34,7 +32,6 @@ export const prompts: Prompt[] = [
     tags: ['fantasy', 'forest', 'magic', 'portal', 'nature'],
     author: 'Fantasy Creator',
     createdAt: '2024-01-10',
-    views: 2100,
   },
   {
     id: 'prompt-3',
@@ -46,7 +43,6 @@ export const prompts: Prompt[] = [
     tags: ['underwater', 'fantasy', 'architecture', 'creatures', 'ocean'],
     author: 'Ocean Lover',
     createdAt: '2024-01-05',
-    views: 3450,
   },
   {
     id: 'prompt-4',
@@ -58,7 +54,6 @@ export const prompts: Prompt[] = [
     tags: ['space', 'sci-fi', 'technology', 'interior', 'futuristic'],
     author: 'Sci-Fi Fan',
     createdAt: '2024-01-01',
-    views: 1890,
   },
   {
     id: 'prompt-5',
@@ -70,7 +65,6 @@ export const prompts: Prompt[] = [
     tags: ['adventure', 'ancient', 'temple', 'jungle', 'exploration'],
     author: 'Adventure Seeker',
     createdAt: '2023-12-28',
-    views: 2560,
   },
   {
     id: 'prompt-6',
@@ -82,7 +76,6 @@ export const prompts: Prompt[] = [
     tags: ['steampunk', 'airship', 'Victorian', 'machinery', 'fantasy'],
     author: 'Tech Enthusiast',
     createdAt: '2023-12-20',
-    views: 1650,
   },
 ];
 

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -57,7 +58,10 @@ export default function RootLayout({
         <meta name="google-site-verification" content="chCwwRgKZGtFdGybLCTEfQ8RFmPf4cPndbowFfZtyh8" />
         <link rel="canonical" href="https://promptgalleryia.vercel.app/" />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <SpeedInsights />
+      </body>
     </html>
   );
 }

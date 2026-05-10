@@ -84,13 +84,7 @@ export default function PromptPage({ params }: Props) {
                 ))}
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 pb-8 border-b">
-                <div>
-                  <p className="text-gray-600 text-sm">Views</p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {prompt.views.toLocaleString()}
-                  </p>
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8 pb-8 border-b">
                 <div>
                   <p className="text-gray-600 text-sm">Created</p>
                   <p className="text-lg font-semibold text-gray-900">
@@ -183,9 +177,6 @@ export default function PromptPage({ params }: Props) {
                         <h3 className="font-bold text-gray-900 truncate">
                           {relatedPrompt.title}
                         </h3>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {relatedPrompt.views.toLocaleString()} views
-                        </p>
                       </div>
                     </div>
                   </Link>

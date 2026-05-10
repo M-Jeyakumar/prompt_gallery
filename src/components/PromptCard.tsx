@@ -56,7 +56,6 @@ export default function PromptCard({ prompt }: PromptCardProps) {
           </div>
 
           <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-            <span>{prompt.views.toLocaleString()} views</span>
             {prompt.author && <span>{prompt.author}</span>}
           </div>
 
