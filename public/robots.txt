@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /_next/
+Disallow: /*.json$
+Disallow: /admin/
+
+Sitemap: https://promptgallery.vercel.com/sitemap.xml
+
+User-agent: AdsBot-Google
+Allow: /
