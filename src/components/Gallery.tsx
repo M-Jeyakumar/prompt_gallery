@@ -109,7 +109,7 @@ export default function Gallery({ prompts }: GalleryProps) {
             placeholder="Search prompts..."
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black placeholder-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
           />
         </div>
 
