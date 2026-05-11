@@ -145,6 +145,28 @@ export const prompts: Prompt[] = [
     author: "Avalin Rasigan 💜",
     createdAt: "2026-05-10"
 },
+  {
+    id: "prompt-13",
+    title: "3D Chibi Aesthetic Transformation",
+    description: "Transform a reference photo into a cute, high-detail, Korean-style 3D chibi aesthetic, overlaid with aesthetic doodles and soft pastel colors.",
+    content: "Use a real face as a reference photo. The background is the same as in the photo. The lighting is warm, soft, and clean, with subtle shadows. Around the image, add several mini chibi (3D cute style) versions of the character, while maintaining the original facial features.Chibi characters have various poses and expressions: jumping cheerfully waving sitting relaxed holding a drink cute and playful expressions Add hand-drawn white doodle elements: outline around the main body stars, hearts, sparkles motion lines small cute icons Add aesthetic handwriting such as: 'shine,' 'bright day,' 'happy,' 'smile,' etc. (casual doodle font) Overall style: clean & aesthetic composition white sticker outline soft pastel color tone high detail 3D chibi glossy look cute Korean",
+    imageUrl: "https://res.cloudinary.com/duze3mdjt/image/upload/q_auto/f_auto/v1778478387/ChatGPT_Image_May_11_2026_11_13_03_AM_vmwi8x.png",
+    category: "chatgpt",
+    tags: ["chibi", "3D art", "korean aesthetic", "doodle", "pastel", "glossy", "sticker outline"],
+    author: "Avalin Rasigan 💜",
+    createdAt: "2026-05-11"
+},
+{
+    id: "prompt-14",
+    title: "3D Chibi Aesthetic Transformation",
+    description: "Transform a reference photo into a cute, high-detail, Korean-style 3D chibi aesthetic, overlaid with aesthetic doodles and soft pastel colors.",
+    content: "Use a real face as a reference photo. The background is the same as in the photo. The lighting is warm, soft, and clean, with subtle shadows. Around the image, add several mini chibi (3D cute style) versions of the character, while maintaining the original facial features.Chibi characters have various poses and expressions: jumping cheerfully waving sitting relaxed holding a drink cute and playful expressions Add hand-drawn white doodle elements: outline around the main body stars, hearts, sparkles motion lines small cute icons Add aesthetic handwriting such as: 'shine,' 'bright day,' 'happy,' 'smile,' etc. (casual doodle font) Overall style: clean & aesthetic composition white sticker outline soft pastel color tone high detail 3D chibi glossy look cute Korean",
+    imageUrl: "https://res.cloudinary.com/duze3mdjt/image/upload/v1778479463/ChatGPT_Image_May_11_2026_11_17_25_AM_igwioa.jpg",
+    category: "chatgpt",
+    tags: ["chibi", "3D art", "korean aesthetic", "doodle", "pastel", "glossy", "sticker outline"],
+    author: "Avalin Rasigan 💜",
+    createdAt: "2026-05-11"
+}
 // {
 //     id: "prompt-5",
 //     title: "Romantic Aesthetic Poster with Chibi Elements",
@@ -170,18 +192,7 @@ export const prompts: Prompt[] = [
 
 
 
-//   {
-//     id: "prompt-2",
-//     title: "3D Chibi Aesthetic Transformation",
-//     description: "Transform a reference photo into a cute, high-detail, Korean-style 3D chibi aesthetic, overlaid with aesthetic doodles and soft pastel colors.",
-//     content: "Use a real face as a reference photo. The background is the same as in the photo. The lighting is warm, soft, and clean, with subtle shadows. Around the image, add several mini chibi (3D cute style) versions of the character, while maintaining the original facial features.Chibi characters have various poses and expressions: jumping cheerfully waving sitting relaxed holding a drink cute and playful expressions Add hand-drawn white doodle elements: outline around the main body stars, hearts, sparkles motion lines small cute icons Add aesthetic handwriting such as: 'shine,' 'bright day,' 'happy,' 'smile,' etc. (casual doodle font) Overall style: clean & aesthetic composition white sticker outline soft pastel color tone high detail 3D chibi glossy look cute Korean",
-//     imageUrl: "[INSERT REFERENCE IMAGE HERE]",
-//     category: "chatgpt",
-//     tags: ["chibi", "3D art", "korean aesthetic", "doodle", "pastel", "glossy", "sticker outline"],
-//     author: "Avalin Rasigan 💜",
-//     createdAt: "2024-05-23"
-// }
-// ,
+
 ];
 
 export const categories = ['chatgpt', 'gemini', 'other'] as const;
