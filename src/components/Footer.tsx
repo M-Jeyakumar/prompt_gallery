@@ -16,13 +16,28 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="/" className="hover:text-white transition-colors">
-                  Home
+                <a href="/#gallery" className="hover:text-white transition-colors">
+                  Gallery
                 </a>
               </li>
               <li>
-                <a href="/#gallery" className="hover:text-white transition-colors">
-                  Gallery
+                <a
+                  href="https://www.instagram.com/lala_.laaaaaaaa/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.threads.com/@lala_.laaaaaaaa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Threads
                 </a>
               </li>
               <li>
@@ -72,7 +87,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-700 pt-8">
           <p className="text-center text-sm">
-            &copy; {currentYear} Prompt Gallery. All rights reserved. | Created with AI ❤️
+            &copy; {currentYear} Prompt Gallery. All rights reserved. | Created with 💜
           </p>
         </div>
       </div>
