@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import PromptCard from './PromptCard';
 import { Prompt, categories, allTags } from '@/data/prompts';
+import Script from 'next/script';
 
 interface GalleryProps {
   prompts: Prompt[];
@@ -174,6 +175,20 @@ export default function Gallery({ prompts }: GalleryProps) {
         <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
           Gallery ({filteredPrompts.length})
         </h2>
+        
+        {/* Adsterra Native Banner Ad */}
+          <div className="mb-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <Script
+              id="adsterra-native"
+              async
+              strategy="afterInteractive"
+              data-cfasync="false"
+              src="https://pl29410858.profitablecpmratenetwork.com/7875a152b319108cd2ad25a80301f480/invoke.js"
+            />
+
+            <div id="container-7875a152b319108cd2ad25a80301f480"></div>
+          </div>
+
         {filteredPrompts.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-600 text-base md:text-lg">

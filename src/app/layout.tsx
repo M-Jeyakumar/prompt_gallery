@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
@@ -63,6 +64,18 @@ export default function RootLayout({
         {children}
         <SpeedInsights />
         <Analytics />
+        
+        {/* Adsterra Popunder Ad */}
+        {/* <Script 
+          src="https://pl29410857.profitablecpmratenetwork.com/5c/a0/ed/5ca0ed110a7ceab4484659a3ac99cc02.js"
+          strategy="afterInteractive"
+        /> */}
+        
+        {/* Adsterra Social Bar Ad */}
+        <Script 
+          src="https://pl29410859.profitablecpmratenetwork.com/4a/05/d8/4a05d8ad3d1737dec80bb90ffd3ffa16.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
