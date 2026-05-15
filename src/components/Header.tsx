@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Moon, Sun } from 'lucide-react';
 
@@ -38,8 +39,8 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20">
-              <span className="text-white font-bold text-lg">PG</span>
+            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-blue-600/20 bg-[var(--surface)]">
+              <Image src="/logo.png" alt="Prompt Gallery logo" width={40} height={40} className="h-full w-full object-cover" />
             </div>
             <span className="text-xl font-bold text-gray-900">Prompt Gallery</span>
           </Link>

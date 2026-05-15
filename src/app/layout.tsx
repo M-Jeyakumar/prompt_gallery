@@ -26,6 +26,10 @@ export const metadata: Metadata = {
     email: false,
     telephone: false,
   },
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
