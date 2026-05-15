@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Gallery from '@/components/Gallery';
-import { prompts } from '@/data/prompts';
+import { supabase, Prompt } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Prompt Gallery - Discover Amazing AI Image Generation Prompts',
@@ -48,7 +48,50 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  let initialPrompts: Prompt[] = [];
+  
+  try {
+    const { data: prompts, error } = await supabase
+      .from('prompts')
+      .select(`
+        id,
+        title,
+        description,
+        content,
+        category,
+        author,
+        created_at,
+        prompt_images (
+          id,
+          image_url,
+          display_order
+        ),
+        prompt_tags (
+          tag
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (!error && prompts) {
+      initialPrompts = prompts.map((p: any) => ({
+        id: p.id,
+        title: p.title,
+        description: p.description,
+        content: p.content,
+        category: p.category,
+        author: p.author,
+        created_at: p.created_at,
+        tags: (p.prompt_tags || []).map((tagRow: any) => tagRow.tag),
+        images: (p.prompt_images || []).sort(
+          (a: any, b: any) => a.display_order - b.display_order
+        ),
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching initial prompts:', error);
+  }
+
   return (
     <>
       <Header />
@@ -112,7 +155,7 @@ export default function Home() {
           </div>
 
           <div id="gallery">
-            <Gallery prompts={prompts} />
+            <Gallery initialPrompts={initialPrompts} />
           </div>
         </section>
 

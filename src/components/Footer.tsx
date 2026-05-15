@@ -32,6 +32,16 @@ export default function Footer() {
               </li>
               <li>
                 <a
+                  href='https://www.effectivecpmnetwork.com/nvgvi2kvq?key=af0ccb151d0ab26a4d586d7ff2075f97'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='hover:text-white transition-colors'
+                >
+                  Support Me
+                </a>
+              </li>
+              <li>
+                <a
                   href="https://www.threads.com/@lala_.laaaaaaaa"
                   target="_blank"
                   rel="noopener noreferrer"

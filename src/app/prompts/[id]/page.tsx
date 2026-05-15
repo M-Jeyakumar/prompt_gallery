@@ -2,10 +2,11 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, use } from 'react';
+import { useState, use, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { prompts } from '@/data/prompts';
+import ImageCarousel from '@/components/ImageCarousel';
+import { Prompt } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 
 interface Props {
@@ -14,31 +15,73 @@ interface Props {
 
 export default function PromptPage({ params }: Props) {
   const { id } = use(params);
-  const prompt = prompts.find((p) => p.id === id);
+  const [prompt, setPrompt] = useState<Prompt | null>(null);
+  const [relatedPrompts, setRelatedPrompts] = useState<Prompt[]>([]);
+  const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
 
-  if (!prompt) {
-    notFound();
+  const handleCopyPrompt = async () => {
+    if (!prompt) return;
+
+    await navigator.clipboard.writeText(prompt.content);
+    setCopied(true);
+
+    setTimeout(() => setCopied(false), 2000);
+  };
+  
+  useEffect(() => {
+    const fetchPrompt = async () => {
+      try {
+        const response = await fetch(`/api/prompts`);
+        if (!response.ok) throw new Error('Failed to fetch prompts');
+        const allPrompts = await response.json();
+        
+        const found = allPrompts.find((p: Prompt) => p.id === id);
+        if (!found) {
+          notFound();
+        }
+        
+        setPrompt(found);
+        
+        // Get related prompts
+        const foundTags = found.tags || [];
+        const related = allPrompts
+          .filter((p: Prompt) => {
+            const pTags = p.tags || [];
+            return (
+              p.id !== found.id &&
+              (p.category === found.category ||
+                pTags.some((tag: string) => foundTags.includes(tag)))
+            );
+          })
+          .slice(0, 3);
+        
+        setRelatedPrompts(related);
+      } catch (error) {
+        console.error('Error fetching prompt:', error);
+        notFound();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrompt();
+  }, [id]);
+
+  if (loading || !prompt) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="h-16 w-16 rounded-full border-4 border-blue-600 border-t-transparent animate-spin mx-auto mb-4"></div>
+          <p className="text-lg font-semibold text-gray-700">Loading prompt...</p>
+        </div>
+      </div>
+    );
   }
 
-  const handleCopyPrompt = async () => {
-    try {
-      await navigator.clipboard.writeText(prompt.content);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error('Failed to copy prompt:', error);
-    }
-  };
-
-  const relatedPrompts = prompts
-    .filter(
-      (p) =>
-        p.id !== prompt.id &&
-        (p.category === prompt.category ||
-          p.tags.some((tag) => prompt.tags.includes(tag)))
-    )
-    .slice(0, 3);
+  const tags = prompt.tags || [];
+  const images = prompt.images || [];
+  const createdAt = prompt.created_at || '';
 
   return (
     <>
@@ -50,15 +93,12 @@ export default function PromptPage({ params }: Props) {
           </Link>
 
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-            <div className="relative w-full bg-gray-100 flex items-center justify-center" style={{ aspectRatio: '9 / 16', maxHeight: '600px' }}>
-              <Image
-                src={prompt.imageUrl}
-                alt={prompt.title}
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
+            {/* Image Carousel */}
+            {images.length > 0 && (
+              <div className="p-8">
+                <ImageCarousel images={images} title={prompt.title} />
+              </div>
+            )}
 
             <div className="p-8">
               <div className="flex items-start justify-between mb-4">
@@ -74,7 +114,7 @@ export default function PromptPage({ params }: Props) {
               </div>
 
               <div className="flex flex-wrap gap-2 mb-8">
-                {prompt.tags.map((tag) => (
+                {tags.map((tag) => (
                   <span
                     key={tag}
                     className="inline-block bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium"
@@ -88,7 +128,7 @@ export default function PromptPage({ params }: Props) {
                 <div>
                   <p className="text-gray-600 text-sm">Created</p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {new Date(prompt.createdAt).toLocaleDateString()}
+                    {createdAt ? new Date(createdAt).toLocaleDateString() : 'Unknown'}
                   </p>
                 </div>
                 {prompt.author && (
@@ -102,7 +142,7 @@ export default function PromptPage({ params }: Props) {
                 <div>
                   <p className="text-gray-600 text-sm">Tags</p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {prompt.tags.length}
+                    {tags.length}
                   </p>
                 </div>
               </div>
@@ -161,26 +201,32 @@ export default function PromptPage({ params }: Props) {
                 Related Prompts
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {relatedPrompts.map((relatedPrompt) => (
-                  <Link key={relatedPrompt.id} href={`/prompts/${relatedPrompt.id}`}>
-                    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full cursor-pointer">
-                      <div className="relative w-full bg-gray-100 flex items-center justify-center" style={{ aspectRatio: '9 / 16' }}>
-                        <Image
-                          src={relatedPrompt.imageUrl}
-                          alt={relatedPrompt.title}
-                          fill
-                          className="object-contain"
-                          sizes="(max-width: 768px) 100vw, 33vw"
-                        />
+                {relatedPrompts.map((relatedPrompt) => {
+                  const relatedImages = relatedPrompt.images || [];
+                  const imageUrl = relatedImages.length > 0 ? relatedImages[0].image_url : '/placeholder.jpg';
+                  
+                  return (
+                    <Link key={relatedPrompt.id} href={`/prompts/${relatedPrompt.id}`}>
+                      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full cursor-pointer">
+                        <div className="relative w-full bg-gray-100 flex items-center justify-center" style={{ aspectRatio: '9 / 16' }}>
+                          <Image
+                            src={imageUrl}
+                            alt={relatedPrompt.title}
+                            fill
+                            className="object-contain"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            unoptimized
+                          />
+                        </div>
+                        <div className="p-4">
+                          <h3 className="font-bold text-gray-900 truncate">
+                            {relatedPrompt.title}
+                          </h3>
+                        </div>
                       </div>
-                      <div className="p-4">
-                        <h3 className="font-bold text-gray-900 truncate">
-                          {relatedPrompt.title}
-                        </h3>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           )}

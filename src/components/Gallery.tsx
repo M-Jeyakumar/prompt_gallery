@@ -1,29 +1,61 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import PromptCard from './PromptCard';
-import { Prompt, categories, allTags } from '@/data/prompts';
 import Script from 'next/script';
-
-interface GalleryProps {
-  prompts: Prompt[];
-}
+import { Prompt } from '@/lib/supabase';
 
 const PROMPTS_PER_PAGE = 30;
+const categories = ['chatgpt', 'gemini', 'other'];
+const allTags: string[] = []; // Will be dynamically populated from data
 
-export default function Gallery({ prompts }: GalleryProps) {
+interface GalleryProps {
+  initialPrompts?: Prompt[];
+}
+
+export default function Gallery({ initialPrompts = [] }: GalleryProps) {
+  const [prompts, setPrompts] = useState<Prompt[]>(initialPrompts);
+  const [loading, setLoading] = useState(initialPrompts.length === 0);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Fetch prompts from API on mount or if initial prompts are empty
+  useEffect(() => {
+    if (initialPrompts.length === 0) {
+      fetchPrompts();
+    }
+  }, [initialPrompts.length]);
+
+  const fetchPrompts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/prompts');
+      if (!response.ok) throw new Error('Failed to fetch prompts');
+      const data = await response.json();
+      setPrompts(data);
+    } catch (error) {
+      console.error('Error fetching prompts:', error);
+      setPrompts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const allTags = useMemo(
+    () => Array.from(new Set(prompts.flatMap((prompt) => prompt.tags || []))),
+    [prompts]
+  );
+
   const filteredPrompts = useMemo(() => {
     const filtered = prompts.filter((prompt) => {
+      const promptTags = prompt.tags || [];
       const categoryMatch =
         selectedCategory === 'all' || prompt.category === selectedCategory;
       const tagsMatch =
         selectedTags.length === 0 ||
-        selectedTags.some((tag) => prompt.tags.includes(tag));
+        selectedTags.some((tag) => promptTags.includes(tag));
       const searchMatch =
         prompt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         prompt.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
