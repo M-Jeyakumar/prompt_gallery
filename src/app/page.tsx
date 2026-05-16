@@ -4,6 +4,8 @@ import Footer from '@/components/Footer';
 import Gallery from '@/components/Gallery';
 import { supabase, Prompt } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Prompt Gallery - Discover Amazing AI Image Generation Prompts',
   description:
