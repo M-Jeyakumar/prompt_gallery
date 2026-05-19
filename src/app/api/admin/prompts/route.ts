@@ -18,6 +18,20 @@ async function verifyAdmin() {
   return !!adminSession?.value;
 }
 
+export async function GET(request: NextRequest) {
+  try {
+    // Verify admin - just check authentication without returning data
+    if (!(await verifyAdmin())) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    return NextResponse.json({ authenticated: true });
+  } catch (error) {
+    console.error('Error verifying admin:', error);
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Verify admin

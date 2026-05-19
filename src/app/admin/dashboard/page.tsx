@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function AdminDashboard() {
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -19,6 +21,44 @@ export default function AdminDashboard() {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Check if user is authenticated by trying to fetch a protected resource
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/admin/prompts', { method: 'GET' });
+        if (response.status === 401) {
+          // Not authenticated
+          router.push('/admin');
+        } else {
+          // Authenticated
+          setIsAuthenticated(true);
+        }
+      } catch (err) {
+        // On error, redirect to login
+        router.push('/admin');
+      } finally {
+        setAuthChecking(false);
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+
+  if (authChecking) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="h-16 w-16 rounded-full border-4 border-blue-600 border-t-transparent animate-spin mx-auto mb-4"></div>
+          <p className="text-lg font-semibold text-gray-700">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

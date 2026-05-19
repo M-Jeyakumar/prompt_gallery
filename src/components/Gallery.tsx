@@ -7,8 +7,6 @@ import { Prompt } from '@/lib/supabase';
 
 const PROMPTS_PER_PAGE = 30;
 const categories = ['chatgpt', 'gemini', 'other'];
-const allTags: string[] = []; // Will be dynamically populated from data
-
 interface GalleryProps {
   initialPrompts?: Prompt[];
 }
@@ -17,7 +15,6 @@ export default function Gallery({ initialPrompts = [] }: GalleryProps) {
   const [prompts, setPrompts] = useState<Prompt[]>(initialPrompts);
   const [loading, setLoading] = useState(initialPrompts.length === 0);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -43,25 +40,16 @@ export default function Gallery({ initialPrompts = [] }: GalleryProps) {
     }
   };
 
-  const allTags = useMemo(
-    () => Array.from(new Set(prompts.flatMap((prompt) => prompt.tags || []))),
-    [prompts]
-  );
-
   const filteredPrompts = useMemo(() => {
     const filtered = prompts.filter((prompt) => {
-      const promptTags = prompt.tags || [];
       const categoryMatch =
         selectedCategory === 'all' || prompt.category === selectedCategory;
-      const tagsMatch =
-        selectedTags.length === 0 ||
-        selectedTags.some((tag) => promptTags.includes(tag));
       const searchMatch =
         prompt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         prompt.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         prompt.content.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return categoryMatch && tagsMatch && searchMatch;
+      return categoryMatch && searchMatch;
     });
 
     // Sort by ID numerically (prompt-1, prompt-2, ..., prompt-10, prompt-11)
@@ -70,23 +58,15 @@ export default function Gallery({ initialPrompts = [] }: GalleryProps) {
       const numB = parseInt(b.id.match(/\d+/)?.[0] || '0', 10);
       return numA - numB;
     });
-  }, [prompts, selectedCategory, selectedTags, searchQuery]);
+  }, [prompts, selectedCategory, searchQuery]);
 
   const totalPages = Math.ceil(filteredPrompts.length / PROMPTS_PER_PAGE);
   const startIndex = (currentPage - 1) * PROMPTS_PER_PAGE;
   const endIndex = startIndex + PROMPTS_PER_PAGE;
   const paginatedPrompts = filteredPrompts.slice(startIndex, endIndex);
 
-  const toggleTag = (tag: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-    );
-    setCurrentPage(1);
-  };
-
   const clearFilters = () => {
     setSelectedCategory('all');
-    setSelectedTags([]);
     setSearchQuery('');
     setCurrentPage(1);
   };
@@ -102,7 +82,7 @@ export default function Gallery({ initialPrompts = [] }: GalleryProps) {
   };
 
   const hasActiveFilters =
-    selectedCategory !== 'all' || selectedTags.length > 0 || searchQuery !== '';
+    selectedCategory !== 'all' || searchQuery !== '';
 
   const getPageNumbers = () => {
     const pages = [];
@@ -169,25 +149,6 @@ export default function Gallery({ initialPrompts = [] }: GalleryProps) {
                 }`}
               >
                 {category}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">Filter by Tags</h3>
-          <div className="flex flex-wrap gap-2">
-            {allTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => toggleTag(tag)}
-                className={`px-2 md:px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
-                  selectedTags.includes(tag)
-                    ? 'bg-green-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                #{tag}
               </button>
             ))}
           </div>
