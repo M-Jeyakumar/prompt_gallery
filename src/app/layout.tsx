@@ -63,6 +63,25 @@ export default function RootLayout({
         <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="google-site-verification" content="chCwwRgKZGtFdGybLCTEfQ8RFmPf4cPndbowFfZtyh8" />
         <link rel="canonical" href="https://promptgalleryia.vercel.app/" />
+        
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-9XB80D1XKJ"
+          strategy="afterInteractive"
+          async
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-9XB80D1XKJ');
+            `,
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col">
         {children}
