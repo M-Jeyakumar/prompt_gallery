@@ -24,5 +24,6 @@ export interface Prompt {
   tags: string[];
   author?: string;
   created_at: string;
+  likes?: number;
   images?: PromptImage[];
 }
