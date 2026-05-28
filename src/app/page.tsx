@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Gallery from '@/components/Gallery';
 import { supabase, Prompt } from '@/lib/supabase';
+import { generateSlug } from '@/lib/slugify';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,6 +59,7 @@ export default async function Home() {
       .from('prompts')
       .select(`
         id,
+        slug,
         title,
         description,
         content,
@@ -78,6 +80,7 @@ export default async function Home() {
     if (!error && prompts) {
       initialPrompts = prompts.map((p: any) => ({
         id: p.id,
+        slug: p.slug || generateSlug(p.title),
         title: p.title,
         description: p.description,
         content: p.content,

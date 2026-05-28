@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { generateSlug } from '@/lib/slugify';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { v2 as cloudinary } from 'cloudinary';
@@ -47,9 +48,10 @@ export async function POST(request: NextRequest) {
     const author = formData.get('author') as string;
     const tags = JSON.parse((formData.get('tags') as string) || '[]');
 
-    // Generate ID
+    // Generate ID and slug
     const timestamp = Date.now();
     const id = `prompt-${timestamp}`;
+    const slug = generateSlug(title);
 
     // Insert prompt
     const { data: prompt, error: promptError } = await supabase
@@ -57,6 +59,7 @@ export async function POST(request: NextRequest) {
       .insert([
         {
           id,
+          slug,
           title,
           description,
           content,

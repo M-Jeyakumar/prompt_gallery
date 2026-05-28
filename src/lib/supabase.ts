@@ -16,6 +16,7 @@ export interface PromptImage {
 
 export interface Prompt {
   id: string;
+  slug: string;
   title: string;
   description: string;
   content: string;

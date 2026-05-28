@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 
 interface Props {
   children: React.ReactNode;
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: Omit<Props, 'children'>): Promise<Metadata> {
-  const { id } = await params;
+  const { slug } = await params;
   
   // Default metadata - dynamic metadata will be better implemented on client side
   // since we're fetching prompts dynamically now

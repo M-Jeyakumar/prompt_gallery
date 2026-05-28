@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { supabase } from '@/lib/supabase';
+import { generateSlug } from '@/lib/slugify';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://promptgalleryia.vercel.app';
@@ -7,15 +8,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const { data: prompts } = await supabase
       .from('prompts')
-      .select('id, created_at')
+      .select('id, title, slug, created_at')
       .order('created_at', { ascending: false });
 
-    const promptRoutes = (prompts || []).map((prompt) => ({
-      url: `${baseUrl}/prompts/${prompt.id}`,
-      lastModified: new Date(prompt.created_at),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }));
+    const promptRoutes = (prompts || [])
+      .map((prompt) => {
+        const slug = prompt.slug || generateSlug(prompt.title);
+        return slug ? {
+          url: `${baseUrl}/prompts/${slug}`,
+          lastModified: new Date(prompt.created_at),
+          changeFrequency: 'weekly' as const,
+          priority: 0.8,
+        } : null;
+      })
+      .filter(Boolean) as MetadataRoute.Sitemap;
+
 
     return [
       {

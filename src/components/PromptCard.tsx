@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Prompt } from '@/lib/supabase';
+import { generateSlug } from '@/lib/slugify';
 
 interface PromptCardProps {
   prompt: Prompt;
@@ -28,8 +29,10 @@ export default function PromptCard({ prompt }: PromptCardProps) {
   // Get the first image from the carousel, or a placeholder
   const imageUrl = images.length > 0 ? images[0].image_url : '/placeholder.jpg';
 
+  const promptSlug = prompt.slug || generateSlug(prompt.title);
+
   return (
-    <Link href={`/prompts/${prompt.id}`}>
+    <Link href={`/prompts/${promptSlug}`}>
       <div className="bg-white border border-white/10 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full cursor-pointer relative">
         <div className="relative w-full bg-gray-100 overflow-hidden" style={{ aspectRatio: '9 / 16' }}>
           <Image

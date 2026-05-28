@@ -1,20 +1,23 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState, use, useEffect } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import ImageCarousel from '@/components/ImageCarousel';
-import { Prompt } from '@/lib/supabase';
-import { notFound } from 'next/navigation';
+import Image from "next/image";
+import Link from "next/link";
+import { useState, use, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import ImageCarousel from "@/components/ImageCarousel";
+import { Prompt } from "@/lib/supabase";
+import { generateSlug } from "@/lib/slugify";
+import { notFound } from "next/navigation";
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export default function PromptPage({ params }: Props) {
-  const { id } = use(params);
+  const { slug } = use(params);
+  const router = useRouter();
   const [prompt, setPrompt] = useState<Prompt | null>(null);
   const [relatedPrompts, setRelatedPrompts] = useState<Prompt[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,21 +31,40 @@ export default function PromptPage({ params }: Props) {
 
     setTimeout(() => setCopied(false), 2000);
   };
-  
+
   useEffect(() => {
     const fetchPrompt = async () => {
       try {
         const response = await fetch(`/api/prompts`);
-        if (!response.ok) throw new Error('Failed to fetch prompts');
+        if (!response.ok) throw new Error("Failed to fetch prompts");
         const allPrompts = await response.json();
-        
-        const found = allPrompts.find((p: Prompt) => p.id === id);
+
+        // Try to find by slug first (new format)
+        let found = allPrompts.find((p: Prompt) => p.slug === slug);
+
+        // Fallback to ID for backward compatibility (old format)
+        if (!found) {
+          found = allPrompts.find((p: Prompt) => p.id === slug);
+          if (found) {
+            const computedSlug = found.slug || generateSlug(found.title);
+            router.replace(`/prompts/${computedSlug}`);
+            return;
+          }
+        }
+
+        // Fallback: match by generated slug for rows where slug column is null
+        if (!found) {
+          found = allPrompts.find(
+            (p: Prompt) => generateSlug(p.title) === slug
+          );
+        }
+
         if (!found) {
           notFound();
         }
-        
+
         setPrompt(found);
-        
+
         // Get related prompts
         const foundTags = found.tags || [];
         const related = allPrompts
@@ -55,10 +77,10 @@ export default function PromptPage({ params }: Props) {
             );
           })
           .slice(0, 3);
-        
+
         setRelatedPrompts(related);
       } catch (error) {
-        console.error('Error fetching prompt:', error);
+        console.error("Error fetching prompt:", error);
         notFound();
       } finally {
         setLoading(false);
@@ -66,14 +88,16 @@ export default function PromptPage({ params }: Props) {
     };
 
     fetchPrompt();
-  }, [id]);
+  }, [slug, router]);
 
   if (loading || !prompt) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="h-16 w-16 rounded-full border-4 border-blue-600 border-t-transparent animate-spin mx-auto mb-4"></div>
-          <p className="text-lg font-semibold text-gray-700">Loading prompt...</p>
+          <p className="text-lg font-semibold text-gray-700">
+            Loading prompt...
+          </p>
         </div>
       </div>
     );
@@ -81,14 +105,17 @@ export default function PromptPage({ params }: Props) {
 
   const tags = prompt.tags || [];
   const images = prompt.images || [];
-  const createdAt = prompt.created_at || '';
+  const createdAt = prompt.created_at || "";
 
   return (
     <>
       <Header />
       <main className="min-h-screen bg-gray-50">
         <div className="max-w-4xl mx-auto px-6 py-12">
-          <Link href="/" className="text-blue-600 hover:text-blue-800 font-semibold mb-8 inline-block">
+          <Link
+            href="/"
+            className="text-blue-600 hover:text-blue-800 font-semibold mb-8 inline-block"
+          >
             ← Back to Gallery
           </Link>
 
@@ -128,7 +155,9 @@ export default function PromptPage({ params }: Props) {
                 <div>
                   <p className="text-gray-600 text-sm">Created</p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {createdAt ? new Date(createdAt).toLocaleDateString() : 'Unknown'}
+                    {createdAt
+                      ? new Date(createdAt).toLocaleDateString()
+                      : "Unknown"}
                   </p>
                 </div>
                 {prompt.author && (
@@ -148,7 +177,9 @@ export default function PromptPage({ params }: Props) {
               </div>
 
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Prompt</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Prompt
+                </h2>
                 <div className="bg-gray-100 p-6 rounded-lg mb-4 border-l-4 border-blue-600">
                   <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
                     {prompt.content}
@@ -158,11 +189,11 @@ export default function PromptPage({ params }: Props) {
                   onClick={handleCopyPrompt}
                   className={`w-full py-3 px-6 rounded-lg font-semibold text-lg transition-colors ${
                     copied
-                      ? 'bg-green-500 text-white'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                      ? "bg-green-500 text-white"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
                   }`}
                 >
-                  {copied ? '✓ Copied to Clipboard!' : 'Copy Prompt'}
+                  {copied ? "✓ Copied to Clipboard!" : "Copy Prompt"}
                 </button>
               </div>
 
@@ -172,23 +203,31 @@ export default function PromptPage({ params }: Props) {
                 </h2>
                 <ol className="list-decimal list-inside space-y-3 text-gray-700">
                   <li>Copy the prompt using the button above</li>
-                  <li>Open ChatGPT, Google Gemini, or another AI image generator</li>
+                  <li>
+                    Open ChatGPT, Google Gemini, or another AI image generator
+                  </li>
                   <li>Paste the prompt into the input field</li>
                   <li>Generate your image and enjoy!</li>
                 </ol>
               </div>
 
               <div className="bg-blue-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">💡 Pro Tips</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  💡 Pro Tips
+                </h3>
                 <ul className="text-gray-700 space-y-2 text-sm">
                   <li>
                     • Feel free to modify the prompt to suit your specific needs
                   </li>
-                  <li>• Experiment with different AI tools for varied results</li>
-                  <li>• Add more details to the prompt for higher quality results</li>
                   <li>
-                    • Use negative prompts to exclude unwanted elements (some tools
-                    support this)
+                    • Experiment with different AI tools for varied results
+                  </li>
+                  <li>
+                    • Add more details to the prompt for higher quality results
+                  </li>
+                  <li>
+                    • Use negative prompts to exclude unwanted elements (some
+                    tools support this)
                   </li>
                 </ul>
               </div>
@@ -203,12 +242,23 @@ export default function PromptPage({ params }: Props) {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {relatedPrompts.map((relatedPrompt) => {
                   const relatedImages = relatedPrompt.images || [];
-                  const imageUrl = relatedImages.length > 0 ? relatedImages[0].image_url : '/placeholder.jpg';
-                  
+                  const imageUrl =
+                    relatedImages.length > 0
+                      ? relatedImages[0].image_url
+                      : "/placeholder.jpg";
+
                   return (
-                    <Link key={relatedPrompt.id} href={`/prompts/${relatedPrompt.id}`}>
+                    <Link
+                      key={relatedPrompt.id}
+                      href={`/prompts/${
+                        relatedPrompt.slug || relatedPrompt.id
+                      }`}
+                    >
                       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full cursor-pointer">
-                        <div className="relative w-full bg-gray-100 flex items-center justify-center" style={{ aspectRatio: '9 / 16' }}>
+                        <div
+                          className="relative w-full bg-gray-100 flex items-center justify-center"
+                          style={{ aspectRatio: "9 / 16" }}
+                        >
                           <Image
                             src={imageUrl}
                             alt={relatedPrompt.title}
