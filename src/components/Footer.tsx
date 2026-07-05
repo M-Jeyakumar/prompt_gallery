@@ -1,3 +1,5 @@
+import { SUPPORT_ME_LINK } from '@/lib/adsterra';
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -32,7 +34,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href='https://www.effectivecpmnetwork.com/nvgvi2kvq?key=af0ccb151d0ab26a4d586d7ff2075f97'
+                  href={SUPPORT_ME_LINK}
                   target='_blank'
                   rel='noopener noreferrer'
                   className='hover:text-white transition-colors'

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Moon, Sun } from 'lucide-react';
+import { SUPPORT_ME_LINK } from '@/lib/adsterra';
 
 export default function Header() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -62,7 +63,7 @@ export default function Header() {
             About
           </a>
           <a
-            href='https://www.effectivecpmnetwork.com/nvgvi2kvq?key=af0ccb151d0ab26a4d586d7ff2075f97'
+            href={SUPPORT_ME_LINK}
             target='_blank'
             rel='noopener noreferrer'
             className='text-gray-700 hover:text-blue-600 font-semibold'
